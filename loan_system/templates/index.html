@@ -1,0 +1,15 @@
+<!-- loan_system/templates/index.html -->
+{% extends "base.html" %}
+{% block content %}
+  <div class="jumbotron">
+    <h1 class="display-4">Bienvenido al Sistema de Préstamos</h1>
+    <p class="lead">Solicita y gestiona tus préstamos de manera segura y sencilla.</p>
+    <hr class="my-4">
+    {% if not current_user.is_authenticated %}
+      <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}" role="button">Regístrate Ahora</a>
+      <a class="btn btn-secondary btn-lg" href="{{ url_for('login') }}" role="button">Iniciar Sesión</a>
+    {% else %}
+      <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard') }}" role="button">Ir al Dashboard</a>
+    {% endif %}
+  </div>
+{% endblock %}

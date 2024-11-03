@@ -1,0 +1,21 @@
+<!-- loan_system/templates/solicitar_prestamo.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h2>Solicitar Préstamo</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.monto.label }}
+      {{ form.monto(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.meses.label }}
+      {{ form.meses(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.interes.label }}
+      {{ form.interes(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+  </form>
+{% endblock %}

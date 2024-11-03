@@ -1,0 +1,11 @@
+<!-- loan_system/templates/403.html -->
+{% extends "base.html" %}
+{% block content %}
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Acceso Denegado</h4>
+        <p>No tienes permiso para acceder a esta página.</p>
+        <hr>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Volver al Inicio</a>
+    </div>
+{% endblock %}
+

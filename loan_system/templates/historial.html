@@ -1,0 +1,84 @@
+<!-- loan_system/templates/historial.html -->
+
+{% extends "base.html" %}
+{% block content %}
+  <h2>Historial de Préstamos</h2>
+
+  {% if prestamos %}
+    {% for prestamo in prestamos %}
+      <div class="card mb-4">
+        <div class="card-header">
+          Préstamo ID: {{ prestamo.id }} | Monto: ${{ "{:,.2f}".format(prestamo.monto) }} | Plazo: {{ prestamo.meses }} meses | Interés: {{ prestamo.interes }}% | Estado:
+          {% if prestamo.estado == 'aprobado' %}
+              <span class="badge bg-success">Aprobado</span>
+          {% elif prestamo.estado == 'rechazado' %}
+              <span class="badge bg-danger">Rechazado</span>
+          {% elif prestamo.estado == 'pendiente' %}
+              <span class="badge bg-warning text-dark">En Proceso de Aceptación</span>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          {% if prestamo.estado == 'aprobado' %}
+            <canvas id="chart{{ prestamo.id }}" width="400" height="200"></canvas>
+            <h5 class="mt-4">Tabla de Amortización</h5>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Periodo</th>
+                  <th>Cuota</th>
+                  <th>Interés</th>
+                  <th>Capital</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for amort in prestamo.amortizaciones %}
+                  <tr>
+                    <td>{{ amort.periodo }}</td>
+                    <td>${{ "{:,.2f}".format(amort.cuota) }}</td>
+                    <td>${{ "{:,.2f}".format(amort.interes) }}</td>
+                    <td>${{ "{:,.2f}".format(amort.capital) }}</td>
+                    <td>${{ "{:,.2f}".format(amort.saldo) }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                var ctx{{ prestamo.id }} = document.getElementById('chart{{ prestamo.id }}').getContext('2d');
+                var chart{{ prestamo.id }} = new Chart(ctx{{ prestamo.id }}, {
+                    type: 'line',
+                    data: {
+                        labels: [{% for amort in prestamo.amortizaciones %}'Periodo {{ amort.periodo }}',{% endfor %}],
+                        datasets: [{
+                            label: 'Saldo Restante',
+                            data: [{% for amort in prestamo.amortizaciones %}{{ amort.saldo }},{% endfor %}],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+              });
+            </script>
+          {% elif prestamo.estado == 'rechazado' %}
+            <p class="text-danger">Tu solicitud de préstamo ha sido rechazada.</p>
+          {% elif prestamo.estado == 'pendiente' %}
+            <p class="text-warning">Tu solicitud de préstamo está en proceso de aceptación.</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No tienes préstamos en tu historial.</p>
+  {% endif %}
+{% endblock %}

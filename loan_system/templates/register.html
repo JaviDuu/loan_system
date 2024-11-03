@@ -1,0 +1,37 @@
+<!-- loan_system/templates/register.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h2>Registro de Usuario</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.nombre.label }} 
+      {{ form.nombre(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.direccion.label }}
+      {{ form.direccion(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.telefono.label }}
+      {{ form.telefono(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.correo.label }}
+      {{ form.correo(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.username.label }}
+      {{ form.username(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.password.label }}
+      {{ form.password(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.confirm_password.label }}
+      {{ form.confirm_password(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+  </form>
+{% endblock %}

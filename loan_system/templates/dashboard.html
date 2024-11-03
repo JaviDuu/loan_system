@@ -1,0 +1,54 @@
+<!-- loan_system/templates/dashboard.html -->
+
+{% extends "base.html" %}
+{% block content %}
+  <h2>Bienvenido, {{ current_user.nombre }}</h2>
+
+  <h3>Tus Préstamos</h3>
+  {% if prestamos %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Monto</th>
+          <th>Meses</th>
+          <th>Interés (%)</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for prestamo in prestamos %}
+          <tr>
+            <td>{{ prestamo.id }}</td>
+            <td>${{ "{:,.2f}".format(prestamo.monto) }}</td>
+            <td>{{ prestamo.meses }}</td>
+            <td>{{ prestamo.interes }}</td>
+            <td>${{ "{:,.2f}".format(prestamo.total) }}</td>
+            <td>
+              {% if prestamo.estado == 'pendiente' %}
+                  <span class="badge bg-warning text-dark">En Proceso de Aceptación</span>
+              {% elif prestamo.estado == 'aprobado' %}
+                  <span class="badge bg-success">Aprobado</span>
+              {% elif prestamo.estado == 'rechazado' %}
+                  <span class="badge bg-danger">Rechazado</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if prestamo.estado == 'aprobado' %}
+                <a href="{{ url_for('historial', prestamo_id=prestamo.id) }}" class="btn btn-info btn-sm">Ver Detalles</a>
+              {% elif prestamo.estado == 'pendiente' %}
+                <button class="btn btn-secondary btn-sm" disabled>En Proceso</button>
+              {% elif prestamo.estado == 'rechazado' %}
+                <button class="btn btn-danger btn-sm" disabled>Rechazado</button>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No tienes préstamos registrados.</p>
+  {% endif %}
+{% endblock %}

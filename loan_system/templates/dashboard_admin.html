@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Dashboard de Administrador</h2>
+  
+  <h3>Todos los Préstamos</h3>
+  {% if prestamos %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del Usuario</th>
+          <th>Monto</th>
+          <th>Meses</th>
+          <th>Interés (%)</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for prestamo in prestamos %}
+          <tr>
+            <td>{{ prestamo.id }}</td>
+            <td>{{ prestamo.nombre_usuario }}</td>
+            <td>${{ "{:,.2f}".format(prestamo.monto) }}</td>
+            <td>{{ prestamo.meses }}</td>
+            <td>{{ prestamo.interes }}%</td>
+            <td>${{ "{:,.2f}".format(prestamo.total) }}</td>
+            <td>
+              <a href="{{ url_for('historial') }}" class="btn btn-info btn-sm">Ver Detalles</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay préstamos registrados.</p>
+  {% endif %}
+{% endblock %}
